@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang='ru'>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+		<meta name='viewport' content='width=device-width, initial-scale=1'>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+		<link rel="stylesheet" href="style.css">
+		<title>Alogo Vision</title>
+	</head>
+	<body>
+		<main class='col-xs-6 col-xs-offset-3 main'>
+			<h3>Введите набор цифр через пробел</h3>
+			<input class='form-control'>
+			<p></p>
+			<p></p>
+			<p></p>
+		</main>
+	</body>
+	<script>
+		let inputData = document.getElementsByTagName('input')[0];
+		inputData.addEventListener('keydown', (event) => {
+        if (event.keyCode === 13) {
+						let arr = [];
+						arr = inputData.value.split(' ').map(item => item*1);
+						const input = document.getElementsByTagName('p');
+						input[0].innerText = ('Введённый массив: '+'['+arr.join(',')+']');
+						let bubleSortedArr = bubleSortFunc(arr);
+						input[1].innerText = ('Buble sorted array: '+'['+bubleSortedArr.join(',')+']');
+						let quickSortArr = quickSortFunc(arr);
+						input[2].innerText = ('Quick sorted array: '+'['+ quickSortArr +']');
+						event.target.value = "";
+        }
+    });
+		// Buble sort
+		const bubleSortFunc = (arr) => {
+			const len = arr.length;
+			for (let i = 0; i < len ; i++) {
+				for (let j = 0 ; j < len - i - 1; j++){
+				if (arr[j] > arr[j + 1]) {
+					let temp = arr[j];
+					arr[j] = arr[j+1];
+					arr[j + 1] = temp;
+				}
+			}
+			}
+			return arr;
+		}
+
+		// Quick sort
+		const quickSortFunc = (arr, low = 0, hight = arr.length-1) => {
+			if(low < hight) {
+				const index = partition(arr, low, hight);
+				quickSortFunc(arr, low, index-1);
+				quickSortFunc(arr, index, hight);
+			}
+			return arr
+		}
+
+		const partition = (arr, low, hight) => {
+			const pivotPosition = arr[Math.floor(Math.random()*arr.length)];
+			const pivot = arr[pivotPosition];
+			while(hight >= low) {
+				while(arr[hight] > pivot) {
+					hight--;
+				}
+				while(arr[low] < pivot) {
+					low++;
+				}
+				if(hight >= low) {
+					const tmp = arr[low];
+					arr[low] = arr[hight];
+					arr[hight] = tmp;
+					hight--;
+					low++;
+				}
+			}
+			return low;
+		}
+	</script>
+</html>
