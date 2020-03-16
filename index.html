@@ -15,6 +15,7 @@
 			<p></p>
 			<p></p>
 			<p></p>
+			<a href="https://github.com/GreRin/AlgoVision" target="_blank"><button class="btn btn-primary">GitHub</button></a>
 		</main>
 	</body>
 	<script>
@@ -27,7 +28,7 @@
 						input[0].innerText = ('Введённый массив: '+'['+arr.join(',')+']');
 						let bubleSortedArr = bubleSortFunc(arr);
 						input[1].innerText = ('Buble sorted array: '+'['+bubleSortedArr.join(',')+']');
-						let quickSortArr = quickSortFunc(arr);
+						let quickSortArr = quickSortFunc(arr, 0, arr.length - 1 );
 						input[2].innerText = ('Quick sorted array: '+'['+ quickSortArr +']');
 						event.target.value = "";
         }
@@ -48,34 +49,44 @@
 		}
 
 		// Quick sort
-		const quickSortFunc = (arr, low = 0, hight = arr.length-1) => {
-			if(low < hight) {
-				const index = partition(arr, low, hight);
-				quickSortFunc(arr, low, index-1);
-				quickSortFunc(arr, index, hight);
-			}
-			return arr
+		const swap = (items, leftIndex, rightIndex) => {
+				var temp = items[leftIndex];
+				items[leftIndex] = items[rightIndex];
+				items[rightIndex] = temp;
 		}
 
-		const partition = (arr, low, hight) => {
-			const pivotPosition = arr[Math.floor(Math.random()*arr.length)];
-			const pivot = arr[pivotPosition];
-			while(hight >= low) {
-				while(arr[hight] > pivot) {
-					hight--;
+		function partition(items, left, right) {
+				var pivot   = items[Math.floor((right + left) / 2)], //middle element
+						i       = left, //left pointer
+						j       = right; //right pointer
+				while (i <= j) {
+						while (items[i] < pivot) {
+								i++;
+						}
+						while (items[j] > pivot) {
+								j--;
+						}
+						if (i <= j) {
+								swap(items, i, j); //sawpping two elements
+								i++;
+								j--;
+						}
 				}
-				while(arr[low] < pivot) {
-					low++;
+				return i;
+		}
+
+		function quickSortFunc(items, left, right) {
+				var index;
+				if (items.length > 1) {
+						index = partition(items, left, right); //index returned from partition
+						if (left < index - 1) { //more elements on the left side of the pivot
+							quickSortFunc(items, left, index - 1);
+						}
+						if (index < right) { //more elements on the right side of the pivot
+							quickSortFunc(items, index, right);
+						}
 				}
-				if(hight >= low) {
-					const tmp = arr[low];
-					arr[low] = arr[hight];
-					arr[hight] = tmp;
-					hight--;
-					low++;
-				}
-			}
-			return low;
+				return items;
 		}
 	</script>
 </html>
